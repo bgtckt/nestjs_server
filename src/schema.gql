@@ -9,5 +9,23 @@ type User {
 }
 
 type Query {
-  getAllUsers: [User!]!
+  getUsers: [User!]!
+  getUser(id: Int!): User!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  deleteUser(id: Int!): Float!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String!
+  email: String!
 }
