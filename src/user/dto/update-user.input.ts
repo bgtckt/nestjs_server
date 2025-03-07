@@ -1,9 +1,9 @@
-import { Field, ID, InputType } from '@nestjs/graphql'
+import { Field, InputType, Int } from '@nestjs/graphql'
 import { IsAlpha, IsEmail } from 'class-validator'
 
 @InputType()
 export class UpdateUserInput {
-  @Field(() => ID)
+  @Field(() => Int)
 	id: number
 
   @IsAlpha()

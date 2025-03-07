@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { Post } from 'src/post/post.entity';
+import { PostService } from 'src/post/post.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(@InjectRepository(User) private userRepository: Repository<User>, @Inject(forwardRef(() => PostService)) private postService: PostService) {}
 
   async getUsers(): Promise<User[]> {
     return await this.userRepository.find();
@@ -30,5 +32,9 @@ export class UserService {
   async deleteUser(id: number): Promise<number> {
 		await this.userRepository.delete({ id });
 		return id;
+	}
+
+  async getUserPosts(userId: number): Promise<Post[]> {
+		return await this.postService.getUserPosts(userId);
 	}
 }

@@ -1,8 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { Post } from 'src/post/post.entity';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -32,4 +33,9 @@ export class UserResolver {
 	async deleteUser(@Args('id', { type: () => Int }) id: number): Promise<number> {
 		return await this.userService.deleteUser(id);
 	}
+
+  @ResolveField(() => [Post])
+  async posts(@Parent() user: User) {
+    return this.userService.getUserPosts(user.id);
+  }
 }
