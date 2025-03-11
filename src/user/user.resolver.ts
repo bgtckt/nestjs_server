@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { CreateUserInput } from './dto/create-user.input';
@@ -6,6 +6,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { Post } from 'src/post/post.entity';
 import { UseInterceptors } from '@nestjs/common';
 import { CacheInterceptor } from 'src/interceptors/cache.interceptor';
+import { pubSub } from 'src/pubsub/pubsub';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -24,7 +25,10 @@ export class UserResolver {
 
   @Mutation(() => User)
 	async createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
-		return await this.userService.createUser(createUserInput)
+		const newUser = await this.userService.createUser(createUserInput)
+    pubSub.publish('USER_CREATED', { userCreated: newUser });
+
+    return newUser;
 	}
 
   @Mutation(() => User)
@@ -40,5 +44,10 @@ export class UserResolver {
   @ResolveField(() => [Post])
   async posts(@Parent() user: User) {
     return this.userService.getUserPosts(user.id);
+  }
+
+  @Subscription(() => User)
+  userCreated() {
+    return pubSub.asyncIterableIterator('USER_CREATED');
   }
 }

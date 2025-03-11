@@ -46,3 +46,7 @@ input CreatePostInput {
   userId: Int!
   text: String!
 }
+
+type Subscription {
+  userCreated: User!
+}
