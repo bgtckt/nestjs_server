@@ -3,6 +3,8 @@ import { PostService } from './post.service';
 import { Post } from './post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { User } from 'src/user/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { PostGuard } from './post.guard';
 
 @Resolver(() => Post)
 export class PostResolver {
@@ -14,6 +16,7 @@ export class PostResolver {
   }
 
   @Query(() => Post)
+  @UseGuards(PostGuard)
   async getPost(@Args('id', { type: () => Int }) id: number) {
     return await this.postService.getPost(id);
   }
