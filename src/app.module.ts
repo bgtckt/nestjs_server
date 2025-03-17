@@ -19,6 +19,9 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true
+      },
     }),
     TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],
