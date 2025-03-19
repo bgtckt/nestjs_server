@@ -28,12 +28,13 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 			inject: [ConfigService],
 			useFactory: async () => ({
 				type: 'sqlite',
-				host: 'http://localhost',
+        // use http://localhost for work in local environment
+				host: 'http://109.73.206.183',
 				username: process.env.DB_USERNAME,
 				password: process.env.DB_PASSWORD,
 				database: 'test',
 				port: 6000,
-        entities: ['dist/**/*.entity{.ts,.js}' ],
+        entities: ['dist/**/*.entity{.ts,.js}'],
 				synchronize: true,
 				autoLoadEntities: true,
 				logging: true,
