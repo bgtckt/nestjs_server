@@ -5,8 +5,8 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Post } from 'src/post/post.entity';
 import { UseInterceptors } from '@nestjs/common';
-import { CacheInterceptor } from 'src/interceptors/cache.interceptor';
 import { pubSub } from 'src/pubsub/pubsub';
+import { ErrorInterceptor } from 'src/interceptors/error.interceptor';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -18,7 +18,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(ErrorInterceptor)
   async getUser(@Args('id', { type: () => Int }) id: number): Promise<User | null> {
     return await this.userService.getUser(id);
   }
