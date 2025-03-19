@@ -28,8 +28,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 			inject: [ConfigService],
 			useFactory: async () => ({
 				type: 'sqlite',
-        // use http://localhost for work in local environment
-				host: 'http://109.73.206.183',
+        host: process.env.DB_HOST,
 				username: process.env.DB_USERNAME,
 				password: process.env.DB_PASSWORD,
 				database: 'test',
