@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  main:
+    container_name: nestjs-server
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      PORT: 8000
+      DB_HOST: http://109.73.206.183
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 8000:8000
+    command: yarn start:prod
+    restart: unless-stopped
